@@ -3,13 +3,13 @@
 The landing page for **মফস্বল** — a hyperlocal social platform for rural
 Bangladeshi village communities. মফস্বলের কণ্ঠ · The voice of the village.
 
-React + Vite + TypeScript.
+React + Vite + TypeScript. Bilingual: Bengali at `/`, English at `/en/`.
 
 ## Getting started
 
 ```sh
 npm install
-npm run dev        # → http://localhost:5173
+npm run dev        # → http://localhost:5173  (English at /en/)
 ```
 
 ## Scripts
@@ -17,7 +17,7 @@ npm run dev        # → http://localhost:5173
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Dev server with HMR |
-| `npm run build` | Typecheck, then build to `dist/` |
+| `npm run build` | Typecheck, then build both locales to `dist/` |
 | `npm run preview` | Serve the built `dist/` locally |
 | `npm run typecheck` | `tsc -b --noEmit` |
 | `npm run verify` | Typecheck + build — the bar for "done" |
@@ -25,32 +25,48 @@ npm run dev        # → http://localhost:5173
 ## Structure
 
 ```
-index.html            Vite entry; all <head> meta and OG tags
-src/App.tsx           section order
-src/content.ts        all user-facing copy
+index.html            Bengali entry (lang=bn); head meta, OG, hreflang
+en/index.html         English entry (lang=en)
+src/entries/          one mount per locale
+src/App.tsx           section order; takes a locale
+src/i18n/             types.ts (the contract), bn.ts, en.ts, CopyContext
+src/config/visuals.ts icons + colours, keyed by id
 src/styles.css        all styling; design tokens in :root
 src/components/       Nav, Hero, Noticeboard, Story, Features,
                       Diaspora, Trust, Grow, Footer, icons, Reveal
-src/hooks/            useInView
-src/utils/            Bengali numerals
 public/               favicon.svg, robots.txt, sitemap.xml
 ```
 
+## Editing copy
+
+No user-facing string lives in a component — they all come from `useCopy()`.
+
+- Bengali is authoritative: change `src/i18n/bn.ts` first, then `src/i18n/en.ts`.
+- Both dictionaries must satisfy the `Copy` type in `src/i18n/types.ts`, so a
+  missing translation is a **typecheck failure**, not a Bengali string leaking
+  onto the English page.
+- Adding a string means adding it to `types.ts` first, then both dictionaries.
+
+See [CLAUDE.md](CLAUDE.md) for the full bilingual rules — including why English
+keeps village vocabulary (para, union, janaza, haat-bazaar) untranslated.
+
 ## Deploying
 
-Build command `npm run build`, publish directory `dist/`. Works as-is on
-Netlify, Cloudflare Pages, Vercel, or any static host.
+Build command `npm run build`, publish directory `dist/`. Vite emits
+`dist/index.html` and `dist/en/index.html`, so any static host serves `/en/`
+correctly with no rewrite rules. Works as-is on Netlify, Cloudflare Pages,
+Vercel, or nginx.
 
 Before going live:
 
-- **Add an OG image** at `public/og.png`. `index.html` already points at
-  `/og.png`; until the file exists, link previews on Facebook and WhatsApp
-  will be blank — which matters for a product that spreads by sharing.
-- **Check the URLs.** The canonical link, `og:*` tags, and `public/sitemap.xml`
+- **Add an OG image** at `public/og.png`. Both entries point at `/og.png`;
+  until it exists, link previews on Facebook and WhatsApp are blank — which
+  matters for a product that spreads by sharing.
+- **Check the URLs.** Canonicals, `og:*`, `hreflang`, and `public/sitemap.xml`
   all assume the site serves from `https://mofossol.com/`.
-- **Consider prerendering.** The page is client-rendered, so crawlers get an
-  empty `#root` and 3G users wait on the bundle before first paint. See the
-  "Known gap" section in [CLAUDE.md](CLAUDE.md).
+- **Consider prerendering.** Each locale's `<head>` is static, but the body is
+  client-rendered — crawlers get no body text and 3G users wait on the bundle.
+  See "Known gaps" in [CLAUDE.md](CLAUDE.md).
 
 ## Contributing
 

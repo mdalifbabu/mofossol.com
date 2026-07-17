@@ -1,8 +1,27 @@
 import { useEffect, useState } from 'react';
-import { NAV_LINKS } from '../content';
+import { useCopy } from '../i18n/CopyContext';
 import { MenuIcon } from './icons';
 
+/**
+ * The language switch is a real anchor to the other locale's URL, not a state
+ * toggle — /en/ has to be linkable, shareable, and crawlable on its own.
+ */
+function LangSwitch({ className = '' }: { className?: string }) {
+  const { langSwitch } = useCopy();
+  return (
+    <a
+      className={`lang-switch${className ? ' ' + className : ''}`}
+      href={langSwitch.href}
+      hrefLang={langSwitch.href === '/' ? 'bn' : 'en'}
+      aria-label={langSwitch.ariaLabel}
+    >
+      {langSwitch.label}
+    </a>
+  );
+}
+
 export function Nav() {
+  const { nav, a11y } = useCopy();
   const [open, setOpen] = useState(false);
 
   // Escape closes the menu; body scroll is locked while it covers the page.
@@ -26,32 +45,36 @@ export function Nav() {
           <a href="/" className="logo">
             <span className="mark" aria-hidden="true">ম</span>মফস্বল
           </a>
-          <nav className="nav-links" aria-label="প্রধান মেনু">
-            {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href}>{l.label}</a>
+          <nav className="nav-links" aria-label={a11y.mainMenu}>
+            {nav.links.map((l) => (
+              <a key={l.label} href={l.href}>{l.label}</a>
             ))}
+            <LangSwitch />
             <a href="#grow" className="btn btn-primary" style={{ padding: '10px 20px' }}>
-              অ্যাপ নিন
+              {nav.getApp}
             </a>
           </nav>
-          <button
-            className="hamburger"
-            aria-label="মেনু"
-            aria-expanded={open}
-            aria-controls="mm"
-            onClick={() => setOpen((v) => !v)}
-          >
-            <MenuIcon />
-          </button>
+          <div className="nav-mobile-side">
+            <LangSwitch />
+            <button
+              className="hamburger"
+              aria-label={a11y.menuButton}
+              aria-expanded={open}
+              aria-controls="mm"
+              onClick={() => setOpen((v) => !v)}
+            >
+              <MenuIcon />
+            </button>
+          </div>
         </div>
       </header>
 
       <div className={`mobile-menu${open ? ' open' : ''}`} id="mm">
-        {NAV_LINKS.map((l) => (
-          <a key={l.href} href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
+        {nav.links.map((l) => (
+          <a key={l.label} href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
         ))}
         <a href="#grow" className="btn btn-primary" onClick={() => setOpen(false)}>
-          অ্যাপ ডাউনলোড করুন
+          {nav.downloadApp}
         </a>
       </div>
     </>

@@ -6,11 +6,19 @@ import { Diaspora } from './components/Diaspora';
 import { Trust } from './components/Trust';
 import { Grow } from './components/Grow';
 import { Footer } from './components/Footer';
+import { LOCALES } from './i18n';
+import type { Locale } from './i18n';
+import { CopyProvider, useCopy } from './i18n/CopyContext';
 
-export default function App() {
+function SkipLink() {
+  const { a11y } = useCopy();
+  return <a className="skip" href="#main">{a11y.skipToMain}</a>;
+}
+
+export default function App({ locale }: { locale: Locale }) {
   return (
-    <>
-      <a className="skip" href="#main">মূল অংশে যান</a>
+    <CopyProvider copy={LOCALES[locale]}>
+      <SkipLink />
       <Nav />
       <main id="main">
         <Hero />
@@ -22,6 +30,6 @@ export default function App() {
         <Grow />
       </main>
       <Footer />
-    </>
+    </CopyProvider>
   );
 }
