@@ -1,32 +1,38 @@
-import { HERO_STATS } from '../content';
+import { useCopy } from '../i18n/CopyContext';
 import { DownloadIcon } from './icons';
 import { Noticeboard } from './Noticeboard';
 
 export function Hero() {
+  const { hero } = useCopy();
+
   return (
     <section className="hero">
       <div className="wrap hero-grid">
         <div>
           <span className="eyebrow">
             <span className="dot" aria-hidden="true" />
-            গ্রামের জন্য সামাজিক যোগাযোগ · Bangladesh
+            {hero.eyebrow}
           </span>
-          <h1 className="hero-h">মফস্বলের <span className="grn">কণ্ঠ</span></h1>
-          <div className="hero-en">The voice of the village</div>
+          <h1 className="hero-h">
+            {hero.heading.lead} <span className="grn">{hero.heading.accent}</span>
+          </h1>
+          {/* The secondary line is always the other language — it keeps the
+              two-line rhythm of the source design in both locales. */}
+          <div className="hero-en">{hero.accent}</div>
           <p className="hero-sub">
-            গ্রাম মানে বন্ধু তালিকা নয় — গ্রাম মানে <b style={{ color: 'var(--ink)' }}>সমাজ</b>।
-            মফস্বল আপনার গ্রামের ডিজিটাল নোটিশবোর্ড, হাট-বাজার আর জীবনরেখা। জন্ম-মৃত্যু-বিয়ে,
-            রক্তের ডাক আর প্রবাসের ভাই — সবাই এক সুতোয় গাঁথা।
+            {hero.sub.lead}
+            <b style={{ color: 'var(--ink)' }}>{hero.sub.bold}</b>
+            {hero.sub.rest}
           </p>
           <div className="hero-cta">
             <a href="#grow" className="btn btn-primary">
               <DownloadIcon />
-              অ্যাপ ডাউনলোড করুন
+              {hero.ctaDownload}
             </a>
-            <a href="#grow" className="btn btn-ghost">আপনার গ্রামে আনুন</a>
+            <a href="#grow" className="btn btn-ghost">{hero.ctaBring}</a>
           </div>
           <div className="hero-stats">
-            {HERO_STATS.map((s) => (
+            {hero.stats.map((s) => (
               <div className="st" key={s.k}>
                 <div className="k">{s.k}</div>
                 <div className="v">{s.v}</div>

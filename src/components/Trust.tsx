@@ -1,9 +1,12 @@
-import { TRUST_POINTS, VERIFIED_ROWS } from '../content';
+import { POINT_ICONS, POINT_ORDER, ROLE_ORDER, ROLE_VISUALS } from '../config/visuals';
 import { useInView } from '../hooks/useInView';
+import { useCopy } from '../i18n/CopyContext';
 import { VerifiedShieldIcon } from './icons';
 import { Reveal } from './Reveal';
 
 export function Trust() {
+  const { trust } = useCopy();
+
   // The points are a real <ul>, so this one reveals via the hook directly
   // rather than the <Reveal> wrapper (which would nest a div inside the grid).
   const [listRef, listInView] = useInView<HTMLUListElement>();
@@ -12,27 +15,28 @@ export function Trust() {
     <section className="sec" id="trust">
       <div className="wrap">
         <Reveal className="sec-head">
-          <div className="kicker">নিরাপত্তা ও দায়িত্ব</div>
-          <h2>গুজব নয়, <span style={{ color: 'var(--brick)' }}>সত্য</span>।</h2>
-          <p className="lead">
-            গ্রামের সাথে সরাসরি জড়িত একটা প্ল্যাটফর্ম মানুষকে যেমন কাছে আনে, তেমনি গুজব দ্রুত
-            ছড়ানোর ঝুঁকিও বাড়ায়। তাই মফস্বল প্রথম দিন থেকেই নিরাপত্তাকে ফিচার নয়, দায়িত্ব হিসেবে
-            নিয়েছে।
-          </p>
+          <div className="kicker">{trust.kicker}</div>
+          <h2>
+            {trust.heading.before}
+            <span style={{ color: 'var(--brick)' }}>{trust.heading.accent}</span>
+            {trust.heading.after}
+          </h2>
+          <p className="lead">{trust.lead}</p>
         </Reveal>
 
         <div className="trust-grid">
           <Reveal className="verified-list">
-            {VERIFIED_ROWS.map((r) => {
-              const Icon = r.icon;
+            {ROLE_ORDER.map((id) => {
+              const { icon: Icon, color, soft } = ROLE_VISUALS[id];
+              const text = trust.roles[id];
               return (
-                <div className="vrow" key={r.title}>
-                  <div className="vico" style={{ background: r.soft, color: r.color }}>
+                <div className="vrow" key={id}>
+                  <div className="vico" style={{ background: soft, color }}>
                     <Icon size={22} />
                   </div>
                   <div>
-                    <div className="vt">{r.title}</div>
-                    <div className="vd">{r.desc}</div>
+                    <div className="vt">{text.title}</div>
+                    <div className="vd">{text.desc}</div>
                   </div>
                   <span className="vcheck"><VerifiedShieldIcon /></span>
                 </div>
@@ -41,14 +45,15 @@ export function Trust() {
           </Reveal>
 
           <ul ref={listRef} className={`trust-points reveal${listInView ? ' show' : ''}`}>
-            {TRUST_POINTS.map((p) => {
-              const Icon = p.icon;
+            {POINT_ORDER.map((id) => {
+              const Icon = POINT_ICONS[id];
+              const text = trust.points[id];
               return (
-                <li key={p.title}>
+                <li key={id}>
                   <span className="ti"><Icon size={16} /></span>
                   <div>
-                    <h4>{p.title}</h4>
-                    <p>{p.body}</p>
+                    <h4>{text.title}</h4>
+                    <p>{text.body}</p>
                   </div>
                 </li>
               );

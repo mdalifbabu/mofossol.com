@@ -1,24 +1,28 @@
-import { FOOTER_COLS } from '../content';
+import { useCopy } from '../i18n/CopyContext';
 import { toBengaliNumerals } from '../utils/bengali';
 
 export function Footer() {
-  const year = toBengaliNumerals(new Date().getFullYear());
+  const { footer, locale } = useCopy();
+
+  // Bengali numerals are right on the Bengali page and wrong on the English
+  // one — "© ২০২৬" reads as a glyph, not a year, to someone reading English.
+  const year = locale === 'bn'
+    ? toBengaliNumerals(new Date().getFullYear())
+    : String(new Date().getFullYear());
 
   return (
     <footer>
       <div className="wrap">
         <div className="foot-grid">
           <div className="foot-brand">
+            {/* মফস্বল is the brand mark — it stays Bengali in both locales. */}
             <a href="/" className="logo">
               <span className="mark" aria-hidden="true">ম</span>মফস্বল
             </a>
-            <p>
-              মফস্বলের কণ্ঠ — বাংলাদেশের গ্রামের জন্য তৈরি সামাজিক যোগাযোগ। জীবনের খবর, হাট-বাজার
-              আর প্রবাসের ভাই, সব এক সুতোয়।
-            </p>
+            <p>{footer.blurb}</p>
           </div>
 
-          {FOOTER_COLS.map((col) => (
+          {footer.cols.map((col) => (
             <div className="foot-col" key={col.heading}>
               <h5>{col.heading}</h5>
               {col.links.map((l) => (
@@ -31,7 +35,7 @@ export function Footer() {
         <div className="stitch brand" style={{ marginBottom: 24 }} />
         <div className="foot-bottom">
           <span>© {year} মফস্বল · mofossol.com</span>
-          <span>গ্রাম মানে সমাজ 🌾</span>
+          <span>{footer.tagline}</span>
         </div>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
-import { CONTACT_EMAIL } from '../content';
+import { CONTACT_EMAIL } from '../i18n';
+import { useCopy } from '../i18n/CopyContext';
 import { Reveal } from './Reveal';
 
 /**
@@ -8,6 +9,7 @@ import { Reveal } from './Reveal';
  * their village and number is worse than no form at all.
  */
 export function Grow() {
+  const { grow } = useCopy();
   const [name, setName] = useState('');
   const [village, setVillage] = useState('');
   const [phone, setPhone] = useState('');
@@ -15,11 +17,11 @@ export function Grow() {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     const body = [
-      `নাম: ${name.trim() || '—'}`,
-      `গ্রাম ও ইউনিয়ন: ${village.trim() || '—'}`,
-      `মোবাইল: ${phone.trim() || '—'}`,
+      `${grow.mail.nameField}: ${name.trim() || '—'}`,
+      `${grow.mail.villageField}: ${village.trim() || '—'}`,
+      `${grow.mail.phoneField}: ${phone.trim() || '—'}`,
     ].join('\n');
-    const subject = encodeURIComponent('আমার গ্রামে মফস্বল');
+    const subject = encodeURIComponent(grow.mail.subject);
     window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${encodeURIComponent(body)}`;
   };
 
@@ -29,36 +31,32 @@ export function Grow() {
         <Reveal className="grow-card">
           <div className="grow-inner">
             <div>
-              <span className="pilot-tag">🌾 পাইলট · চাকালমা গ্রাম দিয়ে শুরু</span>
-              <h2>একটি গ্রাম দিয়ে শুরু।<br />পরের গ্রাম আপনারটা?</h2>
-              <p>
-                মফস্বল একসাথে হাজারো গ্রামে ছড়ানোর চেষ্টা করে না — একটা গ্রামে গভীরভাবে কাজ করে,
-                তারপর পাশের গ্রামে। আপনি যদি আপনার গ্রামের একজন উদ্যোগী মানুষ হন — ইউপি সদস্য,
-                শিক্ষক, দোকানদার বা তরুণ — আপনার গ্রামে মফস্বল আনতে সাহায্য করুন।
-              </p>
+              <span className="pilot-tag">{grow.pilotTag}</span>
+              <h2>{grow.heading.line1}<br />{grow.heading.line2}</h2>
+              <p>{grow.body}</p>
             </div>
 
             <form className="form-card" onSubmit={onSubmit}>
-              <label htmlFor="nm">আপনার নাম</label>
+              <label htmlFor="nm">{grow.form.nameLabel}</label>
               <input
                 id="nm" name="name" type="text" autoComplete="name"
-                placeholder="যেমন: করিম উদ্দিন"
+                placeholder={grow.form.namePlaceholder}
                 value={name} onChange={(e) => setName(e.target.value)}
               />
-              <label htmlFor="vil">গ্রাম ও ইউনিয়ন</label>
+              <label htmlFor="vil">{grow.form.villageLabel}</label>
               <input
                 id="vil" name="village" type="text"
-                placeholder="যেমন: চাকালমা, সদর"
+                placeholder={grow.form.villagePlaceholder}
                 value={village} onChange={(e) => setVillage(e.target.value)}
               />
-              <label htmlFor="ph">মোবাইল নম্বর</label>
+              <label htmlFor="ph">{grow.form.phoneLabel}</label>
               <input
                 id="ph" name="phone" type="tel" autoComplete="tel"
-                placeholder="০১XXX-XXXXXX"
+                placeholder={grow.form.phonePlaceholder}
                 value={phone} onChange={(e) => setPhone(e.target.value)}
               />
-              <button type="submit" className="btn btn-gold">গ্রামের অ্যাংকর হন</button>
-              <div className="note-sm">অথবা সরাসরি অ্যাপ ডাউনলোড করুন — শীঘ্রই আসছে</div>
+              <button type="submit" className="btn btn-gold">{grow.form.submit}</button>
+              <div className="note-sm">{grow.form.note}</div>
             </form>
           </div>
         </Reveal>

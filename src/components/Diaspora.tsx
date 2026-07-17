@@ -1,43 +1,42 @@
+import { useCopy } from '../i18n/CopyContext';
 import { Reveal } from './Reveal';
 
+/** Flags are geography, not language — identical in both locales. */
+const FLAGS = '🇸🇦 🇦🇪 🇶🇦 🇲🇾';
+
 export function Diaspora() {
+  const { diaspora } = useCopy();
+
   return (
     <section className="sec diaspora" id="diaspora">
       <div className="wrap dia-grid">
         <Reveal>
-          <div className="kicker">প্রবাসী সেতু</div>
-          <h2>দূরে থেকেও গ্রামেই।</h2>
-          <div className="flags">🇸🇦 🇦🇪 🇶🇦 🇲🇾</div>
-          <p className="lead">
-            প্রতিটি গ্রামের অনেক ভাই দুবাই, রিয়াদ কিংবা মালয়েশিয়ায়। তাঁদের পাঠানো টাকায় গ্রাম চলে,
-            অথচ গ্রামের খবরটুকু তাঁরা দেরিতে পান। মফস্বলে তাঁরা ভাতিজার আকিকা দেখেন, বোরো ধান ওঠার
-            খবর পান, জানাজায় দূর থেকে শরিক হন — আর এক ট্যাপে রাস্তা মেরামতের তহবিলে অবদান রাখেন।
-          </p>
+          <div className="kicker">{diaspora.kicker}</div>
+          <h2>{diaspora.heading}</h2>
+          <div className="flags">{FLAGS}</div>
+          <p className="lead">{diaspora.lead}</p>
         </Reveal>
 
         <Reveal className="dia-card">
-          <p className="dia-quote">
-            "গ্রামের মুরুব্বি চাচা ইন্তেকাল করেছেন — খবরটা সাথে সাথেই পেলাম। দূর থেকে জানাজায় শরিক
-            হতে পারলাম না, তবে দোয়ায় ছিলাম। আল্লাহ তাঁকে জান্নাত দান করুন।"
-          </p>
+          <p className="dia-quote">{diaspora.quote}</p>
           <div className="dia-who">
-            <div className="ava">র</div>
+            <div className="ava">{diaspora.who.avatar}</div>
             <div>
-              <div className="nm">রহিম উদ্দিন</div>
-              <div className="loc">🇸🇦 রিয়াদ, সৌদি আরব · চাকালমা গ্রাম</div>
+              <div className="nm">{diaspora.who.name}</div>
+              <div className="loc">{diaspora.who.loc}</div>
             </div>
           </div>
           <div className="dia-fund">
             <div className="row">
-              <span style={{ color: 'rgba(255,255,255,.75)' }}>রাস্তা মেরামত তহবিল</span>
-              <span className="amt" style={{ color: 'var(--gold)' }}>৳৪২,০০০</span>
+              <span style={{ color: 'rgba(255,255,255,.75)' }}>{diaspora.fund.label}</span>
+              <span className="amt" style={{ color: 'var(--gold)' }}>{diaspora.fund.amount}</span>
             </div>
             <div style={{ height: 6, borderRadius: 100, background: 'rgba(255,255,255,.16)', margin: '8px 0' }}>
               <div style={{ height: 6, width: '70%', borderRadius: 100, background: 'var(--gold)' }} />
             </div>
             <div className="row" style={{ fontSize: '.82rem', color: 'rgba(255,255,255,.7)' }}>
-              <span>২৩ জন দিয়েছেন</span>
-              <span>৯ জন প্রবাসী থেকে</span>
+              <span>{diaspora.fund.donors}</span>
+              <span>{diaspora.fund.fromDiaspora}</span>
             </div>
           </div>
         </Reveal>

@@ -53,6 +53,15 @@ header{position:sticky;top:0;z-index:100;background:rgba(246,241,228,.86);backdr
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 0 #a76e0a}
 .hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px}
 
+/* ---------- language switch ---------- */
+/* A real link to the other locale's URL, not a toggle — /en/ must be
+   shareable and crawlable on its own. */
+.lang-switch{font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--brand);
+  background:var(--paper);border:1.5px solid var(--border);padding:6px 13px;border-radius:100px;
+  white-space:nowrap;transition:background .2s,border-color .2s}
+.lang-switch:hover{background:var(--brand-soft);border-color:var(--brand)}
+.nav-mobile-side{display:none;align-items:center;gap:10px}
+
 /* ---------- hero ---------- */
 .hero{position:relative;padding:76px 0 64px;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:0;
@@ -196,6 +205,7 @@ footer{background:var(--ground);padding:56px 0 32px;border-top:1px solid var(--b
 @media(max-width:920px){
   .nav-links{display:none}
   .hamburger{display:block}
+  .nav-mobile-side{display:flex}
   .hero-grid,.dia-grid,.trust-grid,.grow-inner{grid-template-columns:1fr;gap:40px}
   .board{height:auto;display:flex;flex-direction:column;gap:16px}
   .note{position:static;width:100%;opacity:1!important;transform:none!important}

@@ -1,32 +1,33 @@
-import { FEATURES } from '../content';
+import { FEATURE_ORDER, FEATURE_VISUALS } from '../config/visuals';
+import { useCopy } from '../i18n/CopyContext';
 import { MicIcon } from './icons';
 import { Reveal } from './Reveal';
 
 export function Features() {
+  const { features } = useCopy();
+
   return (
     <section className="sec" id="features">
       <div className="wrap">
         <Reveal className="sec-head">
-          <div className="kicker">যা যা করতে পারবেন</div>
-          <h2>গ্রামের প্রয়োজনে তৈরি।</h2>
-          <p className="lead">
-            প্রতিটি ফিচার এসেছে গ্রামের বাস্তবতা থেকে — নতুন কিছু শেখানোর জন্য নয়, বরং যা আপনি
-            ইতিমধ্যে করেন, তাকে সহজ করার জন্য।
-          </p>
+          <div className="kicker">{features.kicker}</div>
+          <h2>{features.heading}</h2>
+          <p className="lead">{features.lead}</p>
         </Reveal>
 
         <div className="feat-grid">
-          {FEATURES.map((f) => {
-            const Icon = f.icon;
+          {FEATURE_ORDER.map((id) => {
+            const { icon: Icon, color, soft } = FEATURE_VISUALS[id];
+            const text = features.items[id];
             return (
-              <Reveal className="feat" key={f.title}>
-                <div className="fico" style={{ background: f.soft }}>
-                  <Icon size={28} color={f.color} />
+              <Reveal className="feat" key={id}>
+                <div className="fico" style={{ background: soft }}>
+                  <Icon size={28} color={color} />
                 </div>
                 <div>
-                  <h3>{f.title}</h3>
-                  <p>{f.body}</p>
-                  <span className="replaces" style={{ color: f.color }}>{f.replaces}</span>
+                  <h3>{text.title}</h3>
+                  <p>{text.body}</p>
+                  <span className="replaces" style={{ color }}>{text.replaces}</span>
                 </div>
               </Reveal>
             );
@@ -39,11 +40,8 @@ export function Features() {
               <MicIcon />
             </div>
             <div>
-              <h3>কণ্ঠে পোস্ট করুন — লিখতে না জানলেও চলবে</h3>
-              <p style={{ maxWidth: 640 }}>
-                গ্রামের অনেকেই লিখতে-পড়তে স্বচ্ছন্দ নন, বিশেষ করে মুরুব্বি আর মা-খালারা। মাইকে চাপ
-                দিয়ে বলুন, গ্রামের সবাই শুনবে — ঠিক যেভাবে মুখে মুখে খবর ছড়ায়।
-              </p>
+              <h3>{features.voice.title}</h3>
+              <p style={{ maxWidth: 640 }}>{features.voice.body}</p>
             </div>
           </Reveal>
         </div>

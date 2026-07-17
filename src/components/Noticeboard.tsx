@@ -1,4 +1,5 @@
 import { useInView } from '../hooks/useInView';
+import { useCopy } from '../i18n/CopyContext';
 import { BadgeCheckIcon } from './icons';
 
 /**
@@ -7,6 +8,7 @@ import { BadgeCheckIcon } from './icons';
  * in styles.css (.n1–.n4, .board.in) — this only toggles the trigger class.
  */
 export function Noticeboard() {
+  const { board } = useCopy();
   const [ref, inView] = useInView<HTMLDivElement>(0.2);
 
   return (
@@ -16,17 +18,15 @@ export function Noticeboard() {
         <div className="pad">
           <div className="top">
             <span className="chip" style={{ background: 'var(--brick-soft)', color: 'var(--brick)' }}>
-              🩸 রক্ত
+              {board.blood.chip}
             </span>
-            <span className="badge"><BadgeCheckIcon /> ইউপি সদস্য</span>
+            <span className="badge"><BadgeCheckIcon /> {board.blood.badge}</span>
           </div>
           <div className="bloodbig">
-            <div className="bg">O+</div>
+            <div className="bg">{board.blood.group}</div>
             <div>
-              <div className="nm" style={{ color: 'var(--brick)' }}>জরুরি রক্ত দরকার</div>
-              <div style={{ fontSize: '.8rem', color: 'var(--muted)' }}>
-                সদর হাসপাতাল · আজ রাতেই ২ ব্যাগ
-              </div>
+              <div className="nm" style={{ color: 'var(--brick)' }}>{board.blood.title}</div>
+              <div style={{ fontSize: '.8rem', color: 'var(--muted)' }}>{board.blood.detail}</div>
             </div>
           </div>
         </div>
@@ -37,14 +37,11 @@ export function Noticeboard() {
         <div className="pad">
           <div className="top">
             <span className="chip" style={{ background: 'var(--slate-soft)', color: 'var(--slate)' }}>
-              মৃত্যু সংবাদ
+              {board.death.chip}
             </span>
-            <span className="badge">ইমাম ✓</span>
+            <span className="badge">{board.death.badge}</span>
           </div>
-          <p className="msg">
-            ইন্না লিল্লাহি ওয়া ইন্না ইলাইহি রাজিউন। মরহুম আব্দুল জলিল (৭৫) ইন্তেকাল করেছেন।
-            জানাজা বাদ যোহর, বড় মসজিদ মাঠে।
-          </p>
+          <p className="msg">{board.death.msg}</p>
         </div>
       </div>
 
@@ -53,19 +50,19 @@ export function Noticeboard() {
         <div className="pad">
           <div className="top">
             <span className="chip" style={{ background: 'var(--gold-soft)', color: 'var(--gold)' }}>
-              ✨ বিবাহ
+              {board.wedding.chip}
             </span>
           </div>
           <div className="who">
-            <div className="ava" style={{ background: 'var(--gold-soft)', color: 'var(--gold)' }}>স</div>
+            <div className="ava" style={{ background: 'var(--gold-soft)', color: 'var(--gold)' }}>
+              {board.wedding.avatar}
+            </div>
             <div>
-              <div className="nm">সোলায়মান হক</div>
-              <div style={{ fontSize: '.78rem', color: 'var(--faint)' }}>গতকাল</div>
+              <div className="nm">{board.wedding.name}</div>
+              <div style={{ fontSize: '.78rem', color: 'var(--faint)' }}>{board.wedding.time}</div>
             </div>
           </div>
-          <p className="msg" style={{ marginTop: 9 }}>
-            শাহিনের বিয়ে আগামী শুক্রবার — গ্রামের সবাইকে দাওয়াত রইল!
-          </p>
+          <p className="msg" style={{ marginTop: 9 }}>{board.wedding.msg}</p>
         </div>
       </div>
 
@@ -74,17 +71,19 @@ export function Noticeboard() {
         <div className="pad">
           <div className="top">
             <span className="chip" style={{ background: 'var(--brand-soft)', color: 'var(--brand)' }}>
-              তহবিল
+              {board.fund.chip}
             </span>
           </div>
-          <div className="nm" style={{ marginBottom: 4 }}>রাস্তা মেরামত তহবিল</div>
+          <div className="nm" style={{ marginBottom: 4 }}>{board.fund.title}</div>
           <div className="prog"><i style={{ width: '70%' }} /></div>
           <div
             className="row"
             style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.8rem', color: 'var(--muted)' }}
           >
-            <span><b style={{ color: 'var(--brand)' }}>৳৪২,০০০</b> / ৳৬০,০০০</span>
-            <span>✈️ ৯ জন প্রবাসী</span>
+            <span>
+              <b style={{ color: 'var(--brand)' }}>{board.fund.raised}</b> / {board.fund.goal}
+            </span>
+            <span>{board.fund.diaspora}</span>
           </div>
         </div>
       </div>
